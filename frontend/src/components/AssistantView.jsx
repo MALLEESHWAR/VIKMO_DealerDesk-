@@ -407,7 +407,7 @@ export function AssistantView({ selectedDealerId, dealers, onNavigateToOrder, on
         </div>
 
         {/* Quick Prompts Bar */}
-        <div style={{ padding: '0.6rem 1.25rem', background: 'rgba(15, 23, 42, 0.6)', borderTop: '1px solid var(--border-subtle)', display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
+        <div style={{ padding: '0.6rem 1.25rem', background: '#f8fafc', borderTop: '1px solid var(--border-subtle)', display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
           {quickPrompts.map((prompt, i) => (
             <button
               key={i}

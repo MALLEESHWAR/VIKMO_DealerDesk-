@@ -45,12 +45,12 @@ export function SupplierSyncView({ showToast }) {
       </div>
 
       {/* Main Action Banner */}
-      <div className="glass-panel" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.7) 100%)' }}>
+      <div className="glass-panel" style={{ marginBottom: '1.5rem', background: '#ffffff' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.35rem' }}>
               <Globe size={20} color="#06b6d4" />
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-bright)' }}>
                 Supplier API Endpoint: <span className="mono-badge">http://127.0.0.1:8099/v1/products</span>
               </h2>
             </div>
@@ -75,7 +75,7 @@ export function SupplierSyncView({ showToast }) {
       {syncResult && (
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-bright)' }}>
               Last Sync Report (Finished at {lastSyncTime} in {(syncResult.durationMs / 1000).toFixed(2)}s)
             </h3>
             <span style={{ fontSize: '0.8rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 600 }}>
@@ -129,21 +129,21 @@ export function SupplierSyncView({ showToast }) {
 
           {/* Network Telemetry Card */}
           <div className="glass-panel" style={{ marginTop: '1.25rem' }}>
-            <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#f8fafc', marginBottom: '0.75rem' }}>
+            <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-bright)', marginBottom: '0.75rem' }}>
               Network & Ingestion Telemetry
             </h4>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', fontSize: '0.85rem' }}>
-              <div style={{ background: 'rgba(0,0,0,0.25)', padding: '0.75rem', borderRadius: '8px' }}>
-                <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Pages Fetched</div>
-                <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '1.1rem' }}>{syncResult.pages_fetched}</div>
+              <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Pages Fetched</div>
+                <div style={{ fontWeight: 700, color: 'var(--text-bright)', fontSize: '1.1rem' }}>{syncResult.pages_fetched}</div>
               </div>
-              <div style={{ background: 'rgba(0,0,0,0.25)', padding: '0.75rem', borderRadius: '8px' }}>
-                <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>HTTP Requests Made</div>
-                <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '1.1rem' }}>{syncResult.requests_made}</div>
+              <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>HTTP Requests Made</div>
+                <div style={{ fontWeight: 700, color: 'var(--text-bright)', fontSize: '1.1rem' }}>{syncResult.requests_made}</div>
               </div>
-              <div style={{ background: 'rgba(0,0,0,0.25)', padding: '0.75rem', borderRadius: '8px' }}>
-                <div style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Total Valid Unique SKUs</div>
-                <div style={{ fontWeight: 700, color: '#f8fafc', fontSize: '1.1rem' }}>
+              <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Total Valid Unique SKUs</div>
+                <div style={{ fontWeight: 700, color: 'var(--text-bright)', fontSize: '1.1rem' }}>
                   {syncResult.created + syncResult.updated + syncResult.unchanged}
                 </div>
               </div>

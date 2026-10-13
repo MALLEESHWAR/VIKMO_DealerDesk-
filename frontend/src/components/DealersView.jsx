@@ -187,7 +187,7 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
             <form onSubmit={handleCreateDealer}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     Dealer Code *
                   </label>
                   <input
@@ -200,7 +200,7 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     Credit Limit (₹)
                   </label>
                   <input
@@ -214,7 +214,7 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
               </div>
 
               <div style={{ marginBottom: '0.75rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                   Dealership / Business Name *
                 </label>
                 <input
@@ -229,7 +229,7 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     City
                   </label>
                   <input
@@ -241,7 +241,7 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     Phone Number
                   </label>
                   <input
@@ -256,7 +256,7 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     Email
                   </label>
                   <input
@@ -268,7 +268,7 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     GSTIN
                   </label>
                   <input

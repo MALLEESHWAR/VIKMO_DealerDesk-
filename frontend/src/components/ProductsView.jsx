@@ -250,10 +250,10 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
                         )}
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>{item.category}</span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-main)' }}>{item.category}</span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 500 }}>{item.brand}</span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>{item.brand}</span>
                       </td>
                       <td>
                         <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{item.vehicle_fitment}</span>
@@ -358,17 +358,17 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
               </button>
             </div>
 
-            <div style={{ marginBottom: '1.25rem', padding: '0.85rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ marginBottom: '1.25rem', padding: '0.85rem', background: '#f8fafc', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                 <span className="mono-badge">{adjustModalSku.sku}</span>
-                <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Current: {adjustModalSku.stock} units</span>
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Current: {adjustModalSku.stock} units</span>
               </div>
-              <div style={{ fontWeight: 600, color: '#f8fafc' }}>{adjustModalSku.name}</div>
+              <div style={{ fontWeight: 600, color: 'var(--text-bright)' }}>{adjustModalSku.name}</div>
             </div>
 
             <form onSubmit={handleStockUpdate}>
               <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.35rem', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem', fontWeight: 600 }}>
                   New Available Stock Quantity
                 </label>
                 <input
@@ -382,7 +382,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
               </div>
 
               <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.35rem', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem', fontWeight: 600 }}>
                   Adjustment Reason
                 </label>
                 <input
@@ -421,7 +421,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
             <form onSubmit={handleCreateProduct}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     SKU Code *
                   </label>
                   <input
@@ -434,7 +434,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     Unit Price (₹) *
                   </label>
                   <input
@@ -451,7 +451,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
               </div>
 
               <div style={{ marginBottom: '0.75rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                   Part Name *
                 </label>
                 <input
@@ -466,7 +466,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.75rem' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     Category
                   </label>
                   <input
@@ -478,7 +478,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                     Brand
                   </label>
                   <input
@@ -492,7 +492,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
               </div>
 
               <div style={{ marginBottom: '0.75rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                   Vehicle Fitment
                 </label>
                 <input
@@ -505,7 +505,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
               </div>
 
               <div style={{ marginBottom: '1.25rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.3rem', fontWeight: 600 }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.3rem', fontWeight: 600 }}>
                   Description
                 </label>
                 <textarea

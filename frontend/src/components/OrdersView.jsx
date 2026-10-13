@@ -472,18 +472,18 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
             </div>
 
             {/* Financial Summary */}
-            <div style={{ background: 'rgba(15, 23, 42, 0.9)', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-subtle)', marginBottom: '1.25rem' }}>
+            <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '10px', border: '1px solid var(--border-subtle)', marginBottom: '1.25rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.85rem' }}>
-                <span style={{ color: '#94a3b8' }}>Net Items Subtotal:</span>
+                <span style={{ color: 'var(--text-muted)' }}>Net Items Subtotal:</span>
                 <span className="currency-amount">₹{selectedOrder.subtotal}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
-                <span style={{ color: '#94a3b8' }}>Applicable GST (18% rounded half up):</span>
-                <span className="currency-amount" style={{ color: '#94a3b8' }}>₹{selectedOrder.tax_total}</span>
+                <span style={{ color: 'var(--text-muted)' }}>Applicable GST (18% rounded half up):</span>
+                <span className="currency-amount" style={{ color: 'var(--text-muted)' }}>₹{selectedOrder.tax_total}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)', fontSize: '1rem', fontWeight: 700 }}>
-                <span style={{ color: '#f8fafc' }}>Grand Total (INR):</span>
-                <span className="currency-amount" style={{ color: '#34d399', fontSize: '1.15rem' }}>₹{selectedOrder.grand_total}</span>
+                <span style={{ color: 'var(--text-bright)' }}>Grand Total (INR):</span>
+                <span className="currency-amount" style={{ color: '#059669', fontSize: '1.15rem' }}>₹{selectedOrder.grand_total}</span>
               </div>
             </div>
 
@@ -583,10 +583,10 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                     left: 0,
                     right: 0,
                     zIndex: 50,
-                    background: '#0d1527',
+                    background: '#ffffff',
                     border: '1px solid var(--border-subtle)',
                     borderRadius: '8px',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.6)',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
                     marginTop: '4px',
                     maxHeight: '220px',
                     overflowY: 'auto',
@@ -599,20 +599,20 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                       style={{
                         padding: '0.65rem 0.85rem',
                         cursor: 'pointer',
-                        borderBottom: '1px solid rgba(255,255,255,0.04)',
+                        borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.05)')}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f1f5f9')}
                       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                     >
                       <div>
-                        <div style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-bright)', fontSize: '0.85rem' }}>
                           <span className="mono-badge" style={{ marginRight: '6px' }}>{p.sku}</span>
                           {p.name}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                           {p.vehicle_fitment} • Stock: {p.stock} units
                         </div>
                       </div>
@@ -644,24 +644,24 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        padding: '0.65rem 0.85rem',
-                        background: 'rgba(255,255,255,0.03)',
+                        padding: '0.75rem 0.85rem',
+                        background: '#ffffff',
                         borderRadius: '8px',
                         border: '1px solid var(--border-subtle)',
                       }}
                     >
                       <div style={{ flex: 1, minWidth: 0, marginRight: '1rem' }}>
-                        <div style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-bright)', fontSize: '0.85rem' }}>
                           <span className="mono-badge" style={{ marginRight: '6px' }}>{item.sku}</span>
                           {item.name}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                           Unit Price: ₹{item.price}
                         </div>
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: '#0f172a', padding: '0.2rem 0.4rem', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', background: '#f1f5f9', padding: '0.2rem 0.4rem', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
                           <button
                             type="button"
                             className="btn btn-sm"
@@ -670,7 +670,7 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                           >
                             -
                           </button>
-                          <span style={{ fontSize: '0.85rem', fontWeight: 600, minWidth: '24px', textAlign: 'center' }}>
+                          <span style={{ fontSize: '0.85rem', fontWeight: 600, minWidth: '24px', textAlign: 'center', color: 'var(--text-bright)' }}>
                             {item.quantity}
                           </span>
                           <button
@@ -703,18 +703,18 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
 
             {/* Calculations Preview */}
             {orderItems.length > 0 && (
-              <div style={{ background: 'rgba(15, 23, 42, 0.9)', padding: '0.85rem 1.1rem', borderRadius: '10px', border: '1px solid var(--border-subtle)', marginBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '2px' }}>
+              <div style={{ background: '#f8fafc', padding: '0.85rem 1.1rem', borderRadius: '10px', border: '1px solid var(--border-subtle)', marginBottom: '1.25rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '2px' }}>
                   <span>Items Subtotal:</span>
                   <span className="currency-amount">₹{subtotal.toFixed(2)}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '6px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
                   <span>GST Total (18% per-line):</span>
                   <span className="currency-amount">₹{taxTotal.toFixed(2)}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc', paddingTop: '6px', borderTop: '1px solid var(--border-subtle)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-bright)', paddingTop: '6px', borderTop: '1px solid var(--border-subtle)' }}>
                   <span>Estimated Grand Total:</span>
-                  <span className="currency-amount" style={{ color: '#34d399' }}>₹{grandTotal.toFixed(2)}</span>
+                  <span className="currency-amount" style={{ color: '#059669' }}>₹{grandTotal.toFixed(2)}</span>
                 </div>
               </div>
             )}

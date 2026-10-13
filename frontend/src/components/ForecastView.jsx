@@ -243,13 +243,13 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
         ) : (
           <div>
             {/* SVG Bar & Curve Visualizer */}
-            <div style={{ background: 'rgba(15, 23, 42, 0.85)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ background: '#ffffff', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-card)' }}>
               <div style={{ display: 'grid', gridTemplateColumns: `repeat(${weeklyForecast.length}, 1fr)`, gap: '1.5rem', alignItems: 'flex-end', height: '180px', paddingBottom: '20px' }}>
                 {weeklyForecast.map((w, idx) => {
                   const heightPercent = Math.max(12, Math.round((w.forecast_units / maxForecastUnits) * 100));
                   return (
                     <div key={w.week_start} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc', marginBottom: '6px' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-bright)', marginBottom: '6px' }}>
                         {w.forecast_units.toFixed(1)}
                       </span>
                       <div
@@ -261,11 +261,11 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
                             ? 'linear-gradient(180deg, #10b981 0%, #059669 100%)' 
                             : 'linear-gradient(180deg, #06b6d4 0%, #0891b2 100%)',
                           borderRadius: '6px 6px 2px 2px',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                           transition: 'height 0.4s ease',
                         }}
                       />
-                      <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '8px', fontFamily: 'var(--font-mono)' }}>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px', fontFamily: 'var(--font-mono)' }}>
                         Wk {idx + 1} ({w.week_start})
                       </span>
                     </div>
