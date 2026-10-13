@@ -10,8 +10,201 @@ import {
   CheckCircle, 
   ShoppingBag, 
   RotateCcw,
-  ExternalLink
+  ExternalLink,
+  Info
 } from 'lucide-react';
+
+function renderInline(text, onSelectProduct) {
+  if (!text) return null;
+  const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  const tokens = [];
+  let lastIdx = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIdx) {
+      tokens.push({ type: 'text', val: text.substring(lastIdx, match.index) });
+    }
+    const raw = match[0];
+    if (raw.startsWith('`') && raw.endsWith('`')) {
+      const codeVal = raw.slice(1, -1);
+      const isSku = /^[A-Za-z0-9]{2,10}-[A-Za-z0-9]{2,10}$/.test(codeVal) && !codeVal.startsWith('ORD-');
+      tokens.push({ type: 'code', val: codeVal, isSku });
+    } else if (raw.startsWith('**') && raw.endsWith('**')) {
+      tokens.push({ type: 'bold', val: raw.slice(2, -2) });
+    } else if (raw.startsWith('*') && raw.endsWith('*')) {
+      tokens.push({ type: 'italic', val: raw.slice(1, -1) });
+    }
+    lastIdx = regex.lastIndex;
+  }
+  if (lastIdx < text.length) {
+    tokens.push({ type: 'text', val: text.substring(lastIdx) });
+  }
+
+  return tokens.map((token, idx) => {
+    if (token.type === 'code') {
+      if (token.isSku && onSelectProduct) {
+        return (
+          <span
+            key={idx}
+            className="assistant-inline-sku"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectProduct(token.val);
+            }}
+            title={`View ${token.val} in Catalogue`}
+          >
+            {token.val}
+          </span>
+        );
+      }
+      return (
+        <span key={idx} className="mono-badge" style={{ fontSize: '0.8rem', padding: '0.1rem 0.35rem' }}>
+          {token.val}
+        </span>
+      );
+    }
+    if (token.type === 'bold') {
+      return (
+        <strong key={idx} style={{ color: '#f8fafc', fontWeight: 600 }}>
+          {token.val}
+        </strong>
+      );
+    }
+    if (token.type === 'italic') {
+      return (
+        <em key={idx} style={{ color: '#cbd5e1' }}>
+          {token.val}
+        </em>
+      );
+    }
+    return <span key={idx}>{token.val}</span>;
+  });
+}
+
+function StructuredMessage({ content, onSelectProduct }) {
+  if (!content) return null;
+
+  const lines = content.split('\n');
+  const elements = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      i++;
+      continue;
+    }
+
+    // 1. Check for Table block (starts with `|` and ends with `|`)
+    if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      const tableLines = [];
+      while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+        tableLines.push(lines[i].trim());
+        i++;
+      }
+
+      if (tableLines.length >= 2) {
+        const headerCells = tableLines[0]
+          .split('|')
+          .slice(1, -1)
+          .map((c) => c.trim());
+
+        const dataStartIdx = tableLines[1].includes('---') ? 2 : 1;
+        const dataRows = tableLines.slice(dataStartIdx).map((tl) =>
+          tl.split('|').slice(1, -1).map((c) => c.trim())
+        );
+
+        elements.push(
+          <div key={`tbl-${i}`} className="assistant-table-wrapper">
+            <table className="assistant-markdown-table">
+              <thead>
+                <tr>
+                  {headerCells.map((hc, idx) => (
+                    <th key={idx}>{renderInline(hc, onSelectProduct)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {dataRows.map((row, rIdx) => (
+                  <tr key={rIdx}>
+                    {row.map((cell, cIdx) => (
+                      <td key={cIdx}>{renderInline(cell, onSelectProduct)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+        continue;
+      }
+    }
+
+    // 2. Headings: ### or ## or #
+    if (trimmed.startsWith('#')) {
+      const headingText = trimmed.replace(/^#+\s*/, '');
+      elements.push(
+        <h4 key={`h-${i}`} className="assistant-heading">
+          <Sparkles size={14} color="#38bdf8" />
+          <span>{renderInline(headingText, onSelectProduct)}</span>
+        </h4>
+      );
+      i++;
+      continue;
+    }
+
+    // 3. Blockquotes / Callouts: >
+    if (trimmed.startsWith('>')) {
+      const quoteText = trimmed.replace(/^>\s*/, '');
+      elements.push(
+        <div key={`quote-${i}`} className="assistant-callout">
+          <Info size={14} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div>{renderInline(quoteText, onSelectProduct)}</div>
+        </div>
+      );
+      i++;
+      continue;
+    }
+
+    // 4. List Items: - , * , • or 1.
+    if (/^[-*•]\s+/.test(trimmed) || /^\d+\.\s+/.test(trimmed)) {
+      const listItems = [];
+      while (
+        i < lines.length &&
+        (/^[-*•]\s+/.test(lines[i].trim()) || /^\d+\.\s+/.test(lines[i].trim()))
+      ) {
+        const itemLine = lines[i].trim().replace(/^[-*•]\s+/, '').replace(/^\d+\.\s+/, '');
+        listItems.push(itemLine);
+        i++;
+      }
+
+      elements.push(
+        <div key={`list-${i}`} className="assistant-list">
+          {listItems.map((item, idx) => (
+            <div key={idx} className="assistant-list-item">
+              <span style={{ color: '#38bdf8', marginRight: '6px' }}>•</span>
+              {renderInline(item, onSelectProduct)}
+            </div>
+          ))}
+        </div>
+      );
+      continue;
+    }
+
+    // 5. Regular paragraph
+    elements.push(
+      <p key={`p-${i}`} className="assistant-paragraph">
+        {renderInline(line, onSelectProduct)}
+      </p>
+    );
+    i++;
+  }
+
+  return <div className="assistant-structured-content">{elements}</div>;
+}
 
 export function AssistantView({ selectedDealerId, dealers, onNavigateToOrder, onSelectProduct, showToast }) {
   const [messages, setMessages] = useState([
@@ -129,7 +322,11 @@ export function AssistantView({ selectedDealerId, dealers, onNavigateToOrder, on
                 </div>
 
                 <div className="message-bubble">
-                  <div>{msg.content}</div>
+                  {isUser ? (
+                    <div style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</div>
+                  ) : (
+                    <StructuredMessage content={msg.content} onSelectProduct={onSelectProduct} />
+                  )}
 
                   {/* Actions (e.g. Draft order created) */}
                   {msg.actions && msg.actions.length > 0 && (

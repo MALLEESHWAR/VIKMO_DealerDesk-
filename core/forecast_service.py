@@ -4,7 +4,7 @@ import statistics
 from pathlib import Path
 from django.conf import settings
 from core.exceptions import NotFoundError
-from core.models import Inventory
+from core.models import Inventory, Product
 
 
 def load_forecast_csv():
@@ -31,10 +31,19 @@ def get_sku_forecast(sku: str) -> dict:
     if sku not in sku_forecasts:
         raise NotFoundError(f"Forecast for SKU '{sku}' not found.")
 
-    return {
+    res = {
         "sku": sku,
         "forecast": sku_forecasts[sku],
     }
+    p = Product.objects.filter(sku=sku).first()
+    if p:
+        res["product_name"] = p.name
+        res["category"] = p.category
+        res["vehicle_fitment"] = p.vehicle_fitment
+        res["price"] = f"{p.price:.2f}"
+        res["stock"] = p.stock
+
+    return res
 
 
 def get_reorder_suggestions() -> list:
@@ -81,10 +90,17 @@ def get_reorder_suggestions() -> list:
         for inv in Inventory.objects.filter(product_id__in=lead_times.keys())
     }
 
+    # Fetch product metadata
+    products_map = {
+        p.sku: p
+        for p in Product.objects.filter(sku__in=lead_times.keys())
+    }
+
     results = []
     # Preserve ordering of lead_times.csv
     for sku, lead_time_weeks in lead_times.items():
         current_stock = live_stocks.get(sku, 0)
+        prod = products_map.get(sku)
         
         # Forecast for first L weeks
         forecast_list = sku_forecasts.get(sku, [])
@@ -107,6 +123,10 @@ def get_reorder_suggestions() -> list:
 
         results.append({
             "sku": sku,
+            "product_name": prod.name if prod else sku,
+            "category": prod.category if prod else "Automotive Spares",
+            "vehicle_fitment": prod.vehicle_fitment if prod else "Standard Fitment",
+            "price": f"{prod.price:.2f}" if prod else "0.00",
             "current_stock": current_stock,
             "lead_time_weeks": lead_time_weeks,
             "lead_time_demand": lead_time_demand,

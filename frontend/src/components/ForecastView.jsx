@@ -106,7 +106,16 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
             Machine learning 4-week demand horizon (2026-09-28 to 2026-10-19) with statistical safety buffers and dynamic reorder triggers.
           </p>
         </div>
-        <button className="btn btn-secondary" onClick={loadReorders} title="Reload reorder algorithms">
+        <button
+          className="btn btn-secondary"
+          onClick={async () => {
+            await loadReorders();
+            if (showToast) {
+              showToast('success', 'Recalculation Complete', 'Live warehouse inventory and ROP recomputed');
+            }
+          }}
+          title="Reload reorder algorithms"
+        >
           <RefreshCw size={15} /> Recalculate
         </button>
       </div>
@@ -147,34 +156,85 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
       </div>
 
       {/* Interactive Forecast Chart Section */}
-      <div className="glass-panel" style={{ marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <BarChart2 size={20} color="#6366f1" />
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>
-                4-Week Sales Forecast Projection: <span className="mono-badge" style={{ fontSize: '1rem', color: '#06b6d4' }}>{selectedSku}</span>
-              </h2>
-            </div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
-              Projected weekly sales volume from machine learning model ml/forecast.csv
-            </div>
-          </div>
+      {(() => {
+        const activeReorderItem = reorderList.find((r) => r.sku === selectedSku);
+        return (
+          <div className="glass-panel" style={{ marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <BarChart2 size={20} color="#6366f1" />
+                  <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>
+                    4-Week Sales Forecast Projection: <span className="mono-badge" style={{ fontSize: '1rem', color: '#06b6d4' }}>{selectedSku}</span>
+                  </h2>
+                  {activeReorderItem?.product_name && (
+                    <span style={{ fontSize: '0.9rem', color: '#e2e8f0', fontWeight: 500 }}>
+                      — {activeReorderItem.product_name}
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px', display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+                  <span>Fitment: <strong style={{ color: '#cbd5e1' }}>{activeReorderItem?.vehicle_fitment || 'Standard Fitment'}</strong></span>
+                  <span>Lead Time: <strong style={{ color: '#cbd5e1' }}>{activeReorderItem?.lead_time_weeks || 2} wks</strong></span>
+                  <span>Safety Buffer: <strong style={{ color: '#38bdf8' }}>+{activeReorderItem?.safety_stock || 0}</strong></span>
+                  <span>ROP: <strong style={{ color: '#f8fafc' }}>{activeReorderItem?.reorder_point || 0} units</strong></span>
+                  <span>Live Stock: <strong style={{ color: (activeReorderItem?.current_stock < activeReorderItem?.reorder_point) ? '#fb7185' : '#34d399' }}>{activeReorderItem?.current_stock ?? '—'} units</strong></span>
+                </div>
+              </div>
 
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Select SKU:</span>
-            <select
-              className="select"
-              style={{ width: '160px' }}
-              value={selectedSku}
-              onChange={(e) => setSelectedSku(e.target.value)}
-            >
-              {(reorderList.length > 0 ? reorderList.map((r) => r.sku) : FORECAST_SKUS).map((skuCode) => (
-                <option key={skuCode} value={skuCode}>{skuCode}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Select SKU:</span>
+                <select
+                  className="select"
+                  style={{ width: '160px' }}
+                  value={selectedSku}
+                  onChange={(e) => setSelectedSku(e.target.value)}
+                >
+                  {(reorderList.length > 0 ? reorderList.map((r) => r.sku) : FORECAST_SKUS).map((skuCode) => (
+                    <option key={skuCode} value={skuCode}>{skuCode}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {activeReorderItem && activeReorderItem.reorder_qty > 0 && (
+              <div
+                style={{
+                  marginBottom: '1rem',
+                  background: 'rgba(244, 63, 94, 0.12)',
+                  border: '1px solid rgba(244, 63, 94, 0.3)',
+                  padding: '0.5rem 0.85rem',
+                  borderRadius: '8px',
+                  color: '#fb7185',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '0.85rem',
+                  flexWrap: 'wrap',
+                  gap: '0.5rem',
+                }}
+              >
+                <span>
+                  ⚠️ Live warehouse stock ({activeReorderItem.current_stock} units) is below Reorder Point ({activeReorderItem.reorder_point} units). Recommended reorder: <strong>+{activeReorderItem.reorder_qty} units</strong>.
+                </span>
+                {onAddToDraft && (
+                  <button
+                    className="btn btn-sm btn-primary"
+                    style={{ padding: '0.25rem 0.75rem', fontSize: '0.75rem' }}
+                    onClick={() => {
+                      onAddToDraft({
+                        sku: selectedSku,
+                        name: activeReorderItem.product_name || selectedSku,
+                        price: activeReorderItem.price || '0.00',
+                        quantity: activeReorderItem.reorder_qty,
+                      });
+                    }}
+                  >
+                    <ShoppingCart size={13} /> Create Draft (+{activeReorderItem.reorder_qty} units)
+                  </button>
+                )}
+              </div>
+            )}
 
         {loadingForecast ? (
           <div style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>Loading SKU forecast curve...</div>
@@ -216,6 +276,8 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
           </div>
         )}
       </div>
+    );
+  })()}
 
       {/* Reorder Suggestions Table */}
       <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
@@ -254,6 +316,7 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
             <thead>
               <tr>
                 <th>SKU Code</th>
+                <th>Part Description & Fitment</th>
                 <th>Current Warehouse Stock</th>
                 <th>Supplier Lead Time</th>
                 <th>Lead Time Demand</th>
@@ -266,13 +329,13 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
             <tbody>
               {loadingReorders ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
                     Computing statistical reorder suggestions...
                   </td>
                 </tr>
               ) : filteredReorders.length === 0 ? (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
                     No SKUs matched the filter.
                   </td>
                 </tr>
@@ -288,6 +351,14 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
                     >
                       <td>
                         <span className="mono-badge" style={{ fontWeight: 600 }}>{r.sku}</span>
+                      </td>
+                      <td>
+                        <div style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.85rem' }}>
+                          {r.product_name || r.sku}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                          {r.vehicle_fitment || r.category || 'Standard Part'}
+                        </div>
                       </td>
                       <td>
                         <span style={{ fontWeight: 700, color: isUnderROP ? '#fb7185' : '#34d399' }}>
@@ -339,12 +410,32 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
                         )}
                       </td>
                       <td style={{ textAlign: 'right' }}>
-                        <button
-                          className="btn btn-secondary btn-sm"
-                          onClick={() => setSelectedSku(r.sku)}
-                        >
-                          Chart
-                        </button>
+                        <div style={{ display: 'inline-flex', gap: '0.4rem', justifyContent: 'flex-end', alignItems: 'center' }}>
+                          <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => setSelectedSku(r.sku)}
+                            title="View 4-week forecast projection"
+                          >
+                            Chart
+                          </button>
+                          {isUnderROP && onAddToDraft && (
+                            <button
+                              className="btn btn-sm btn-primary"
+                              style={{ padding: '0.2rem 0.6rem', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+                              onClick={() => {
+                                onAddToDraft({
+                                  sku: r.sku,
+                                  name: r.product_name || r.sku,
+                                  price: r.price || '0.00',
+                                  quantity: r.reorder_qty,
+                                });
+                              }}
+                              title={`Create draft order with ${r.reorder_qty} units`}
+                            >
+                              <ShoppingCart size={12} /> Draft +{r.reorder_qty}
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );

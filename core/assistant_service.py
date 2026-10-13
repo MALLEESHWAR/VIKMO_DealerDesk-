@@ -93,6 +93,12 @@ RULES:
 4. Ambiguity: If a dealer asks for parts without specifying their vehicle or motorcycle model (and it cannot be inferred from previous messages in this session), ask a polite clarifying question.
 5. Ordering: You can ONLY create DRAFT orders via create_draft_order. You must NEVER confirm or dispatch orders.
 6. Off-topic: Politely decline any questions not related to automotive parts, inventory, and orders.
+7. Output Formatting: Always format your answers cleanly using structured Markdown:
+   - Use `### ` for clear section headings.
+   - Use Markdown tables (`| Part | SKU | Fitment | Price | Stock |`) when listing matching parts or stock levels.
+   - Use bold for part names (`**Brake Pad**`) and backticks for SKUs (e.g. `BRK-1044`).
+   - For draft orders, clearly list line items, Subtotal, 18% GST, and Grand Total.
+   - Avoid unstructured or unformatted walls of text.
 """
 
 VEHICLE_PATTERNS = [
@@ -373,8 +379,15 @@ def run_deterministic_assistant(session_id: str, dealer_id: int, message: str) -
     if order_intent:
         target_skus = sku_matches if sku_matches else (last_skus[:1] if last_skus else [])
         if target_skus:
-            # Extract quantity
-            qty_match = re.search(r"\b(\d+)\s*(units?|pcs?|pieces?|sets?)?\b", msg_lower)
+            # Extract quantity (strip SKUs first so their numeric parts like 1044 in BRK-1044 are not matched)
+            msg_without_skus = msg_lower
+            for s in sku_matches:
+                msg_without_skus = msg_without_skus.replace(s.lower(), "")
+
+            qty_match = re.search(r"\b(\d+)\s*(?:units?|pcs?|pieces?|sets?|qty|quantit(?:y|ies))\b", msg_without_skus)
+            if not qty_match:
+                qty_match = re.search(r"\b(\d+)\b", msg_without_skus)
+
             qty = int(qty_match.group(1)) if qty_match else 1
             if qty < 1:
                 qty = 1
@@ -385,15 +398,20 @@ def run_deterministic_assistant(session_id: str, dealer_id: int, message: str) -
             try:
                 order_details, action = tool_create_draft_order(dealer_id, items_payload)
                 actions.append(action)
-                item_desc = ", ".join(f"{it['quantity']}x {it['name']} ({it['sku']})" for it in order_details['items'])
+                item_lines = "\n".join(
+                    f"- **{it['name']}** (`{it['sku']}`) × **{it['quantity']} unit(s)** @ ₹{it['unit_price']} = ₹{it['line_total']}"
+                    for it in order_details['items']
+                )
                 reply = (
-                    f"I have created DRAFT order {order_details['order_number']} for {item_desc}. "
-                    f"Subtotal: ₹{order_details['subtotal']}, 18% GST: ₹{order_details['tax_total']}, "
-                    f"Grand Total: ₹{order_details['grand_total']}. "
-                    f"Available stock is not deducted while the order remains in DRAFT state."
+                    f"### Draft Purchase Order Created: `{order_details['order_number']}`\n\n"
+                    f"**Order Item Details:**\n{item_lines}\n\n"
+                    f"- **Subtotal:** ₹{order_details['subtotal']}\n"
+                    f"- **GST (18%):** ₹{order_details['tax_total']}\n"
+                    f"- **Grand Total:** ₹{order_details['grand_total']}\n\n"
+                    f"> **Status:** DRAFT — Live warehouse inventory is **not deducted** until confirmation. You can review and confirm this order under Orders & Fulfillment."
                 )
             except Exception as e:
-                reply = f"Could not create draft order: {str(e)}"
+                reply = f"⚠️ Could not create draft order: {str(e)}"
             cited_skus = extract_cited_skus(reply, tool_calls)
             return {
                 "reply": reply,
@@ -414,11 +432,16 @@ def run_deterministic_assistant(session_id: str, dealer_id: int, message: str) -
         tool_calls.append(tc)
         stock_data = tool_check_stock(target_skus_for_check)
         if stock_data:
-            lines = [
-                f"• {p['name']} ({p['sku']}): Available Stock: {p['stock']} units | Price: ₹{p['price']} | Fitment: {p.get('vehicle_fitment', 'N/A')}"
+            table_header = "| Product Name | SKU | Live Stock | Price | Fitment |\n| :--- | :--- | :--- | :--- | :--- |"
+            table_rows = [
+                f"| **{p['name']}** | `{p['sku']}` | **{p['stock']} units** | ₹{p['price']} | {p.get('vehicle_fitment', 'Universal')} |"
                 for p in stock_data
             ]
-            reply = "Current live availability and pricing from warehouse:\n" + "\n".join(lines)
+            reply = (
+                "### Live Warehouse Stock & Pricing\n\n"
+                + table_header + "\n" + "\n".join(table_rows) + "\n\n"
+                + "*Live stock counts verified directly from warehouse inventory.*"
+            )
         else:
             reply = f"No catalogue product found for SKU(s): {', '.join(target_skus_for_check)}."
         cited_skus = extract_cited_skus(reply, tool_calls)
@@ -456,7 +479,15 @@ def run_deterministic_assistant(session_id: str, dealer_id: int, message: str) -
     if has_part_inquiry:
         if not effective_vehicle and not any(k in msg_lower for k in ["universal", "any", "all"]):
             # Ask clarifying question
-            reply = "Which motorcycle or vehicle model do you need parts for (e.g. Bajaj Pulsar 150, KTM Duke 390, Royal Enfield Classic 350)?"
+            reply = (
+                "### Vehicle Model Required\n\n"
+                "Which motorcycle or vehicle model do you need parts for?\n\n"
+                "- **Bajaj:** Pulsar 150, Pulsar NS200, Dominar 400\n"
+                "- **Royal Enfield:** Classic 350, Himalayan 450, Hunter 350\n"
+                "- **KTM:** Duke 200, Duke 390\n"
+                "- **Yamaha:** R15 V4, MT-15, FZ-S\n"
+                "- **Hero / TVS:** Splendor Plus, Apache RTR 160 / 200"
+            )
             return {
                 "reply": reply,
                 "cited_skus": [],
@@ -484,12 +515,17 @@ def run_deterministic_assistant(session_id: str, dealer_id: int, message: str) -
 
         parts = tool_search_parts(query=query_arg, vehicle=effective_vehicle or "")
         if parts:
-            p_lines = [
-                f"• {p['name']} ({p['sku']}) — Fitment: {p['vehicle_fitment']} | Price: ₹{p['price']} | In Stock: {p['stock']} units"
+            vehicle_label = f" for **{effective_vehicle}**" if effective_vehicle else ""
+            table_header = "| Part Description | SKU | Fitment | Price | Live Stock |\n| :--- | :--- | :--- | :--- | :--- |"
+            table_rows = [
+                f"| **{p['name']}** | `{p['sku']}` | {p['vehicle_fitment']} | ₹{p['price']} | **{p['stock']} units** |"
                 for p in parts[:5]
             ]
-            vehicle_label = f" for {effective_vehicle}" if effective_vehicle else ""
-            reply = f"Here are the matching parts{vehicle_label} in our catalogue:\n" + "\n".join(p_lines)
+            reply = (
+                f"### Matching Spare Parts{vehicle_label}\n\n"
+                + table_header + "\n" + "\n".join(table_rows) + "\n\n"
+                + f"Found **{len(parts)}** compatible option(s) in the catalogue. Mention any SKU to inspect or create a draft order."
+            )
         else:
             vehicle_label = f" for {effective_vehicle}" if effective_vehicle else ""
             reply = f"I could not find matching {query_arg}{vehicle_label} in the current catalogue."
@@ -505,9 +541,12 @@ def run_deterministic_assistant(session_id: str, dealer_id: int, message: str) -
     # 4. Greeting & Introductions
     if any(k in msg_lower for k in ["hello", "hi", "hey", "help", "who are you", "what can you do"]):
         reply = (
-            "Hello! I am your VIKMO DealerDesk AI Assistant. I can help you search compatible spare parts, "
-            "check live warehouse stock and pricing in real time, and generate DRAFT purchase orders for your dealership. "
-            "What motorcycle parts or vehicle model are you looking for today?"
+            "### VIKMO DealerDesk AI Operations Assistant\n\n"
+            "Welcome! I can assist your dealership with:\n\n"
+            "1. **Part Compatibility Search:** Find brake pads, oil filters, chains, batteries, and more by vehicle model.\n"
+            "2. **Live Inventory & Pricing:** Check warehouse stock availability and wholesale rates in real time.\n"
+            "3. **Draft Purchase Orders:** Automatically generate draft orders without deducting live stock.\n\n"
+            "*Which vehicle model or spare part would you like to look up?*"
         )
         return {
             "reply": reply,
@@ -518,9 +557,9 @@ def run_deterministic_assistant(session_id: str, dealer_id: int, message: str) -
 
     # 5. Off-topic Requests: politely decline
     reply = (
-        "I can only assist with automotive spare parts catalogue search, warehouse stock availability, "
-        "and creating draft purchase orders for registered dealers. "
-        "Please let me know which spare part or vehicle model you are inquiring about."
+        "### Automotive Catalogue Inquiries Only\n\n"
+        "I specialize strictly in automotive spare parts, warehouse stock availability, and dealer draft order creation.\n\n"
+        "Please let me know which spare part, SKU, or vehicle model you would like to inquire about."
     )
     return {
         "reply": reply,
