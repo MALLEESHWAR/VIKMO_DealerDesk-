@@ -78,7 +78,8 @@ export function App() {
   };
 
   const handleViewForecast = (sku) => {
-    setForecastSku(sku);
+    const validSku = isForecastSku(sku) ? sku : 'FIL-1016';
+    setForecastSku(validSku);
     setActiveTab('forecast');
   };
 

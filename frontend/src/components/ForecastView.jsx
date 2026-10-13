@@ -13,8 +13,11 @@ import {
   RefreshCw
 } from 'lucide-react';
 
+import { FORECAST_SKUS, isForecastSku } from '../constants';
+
 export function ForecastView({ initialSku, onAddToDraft, showToast }) {
-  const [selectedSku, setSelectedSku] = useState(initialSku || 'FIL-1016');
+  const getInitialSku = (sku) => (sku && isForecastSku(sku) ? sku : 'FIL-1016');
+  const [selectedSku, setSelectedSku] = useState(() => getInitialSku(initialSku));
   const [forecastData, setForecastData] = useState(null);
   const [reorderList, setReorderList] = useState([]);
   const [loadingForecast, setLoadingForecast] = useState(false);
@@ -23,13 +26,20 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
   const [skuSearch, setSkuSearch] = useState('');
 
   const loadForecast = async (sku) => {
-    if (!sku) return;
+    const targetSku = isForecastSku(sku) ? sku : 'FIL-1016';
+    if (targetSku !== sku) {
+      setSelectedSku(targetSku);
+      return;
+    }
     setLoadingForecast(true);
     try {
-      const data = await api.getForecast(sku);
+      const data = await api.getForecast(targetSku);
       setForecastData(data);
     } catch (err) {
-      showToast('error', 'Forecast Load Error', err.message);
+      console.warn('Forecast fetch warning:', err);
+      if (targetSku !== 'FIL-1016') {
+        setSelectedSku('FIL-1016');
+      }
     } finally {
       setLoadingForecast(false);
     }
@@ -41,11 +51,11 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
       const data = await api.getReorderSuggestions();
       const list = data.results || (Array.isArray(data) ? data : []);
       setReorderList(list);
-      if (!selectedSku && list.length > 0) {
-        setSelectedSku(list[0].sku);
+      if (!list.some((r) => r.sku === selectedSku)) {
+        setSelectedSku(list[0]?.sku || 'FIL-1016');
       }
     } catch (err) {
-      showToast('error', 'Reorders Load Error', err.message);
+      console.warn('Reorders fetch warning:', err);
     } finally {
       setLoadingReorders(false);
     }
@@ -63,7 +73,14 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
 
   useEffect(() => {
     if (initialSku) {
-      setSelectedSku(initialSku);
+      if (isForecastSku(initialSku)) {
+        setSelectedSku(initialSku);
+      } else {
+        setSelectedSku('FIL-1016');
+        if (showToast) {
+          showToast('info', 'ML Model Scope', `SKU ${initialSku} is not in the 40 ML-monitored forecast catalogue. Showing FIL-1016.`);
+        }
+      }
     }
   }, [initialSku]);
 
@@ -152,8 +169,8 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
               value={selectedSku}
               onChange={(e) => setSelectedSku(e.target.value)}
             >
-              {reorderList.map((r) => (
-                <option key={r.sku} value={r.sku}>{r.sku}</option>
+              {(reorderList.length > 0 ? reorderList.map((r) => r.sku) : FORECAST_SKUS).map((skuCode) => (
+                <option key={skuCode} value={skuCode}>{skuCode}</option>
               ))}
             </select>
           </div>

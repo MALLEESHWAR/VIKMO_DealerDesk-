@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import { isForecastSku } from '../constants';
 
 export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewForecast, showToast }) {
   const [products, setProducts] = useState([]);
@@ -277,13 +278,30 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
                           >
                             <Edit3 size={14} /> Stock
                           </button>
-                          <button
-                            className="btn btn-secondary btn-sm"
-                            title="View forecast"
-                            onClick={() => onViewForecast && onViewForecast(item.sku)}
-                          >
-                            <TrendingUp size={14} /> Forecast
-                          </button>
+                          {isForecastSku(item.sku) ? (
+                            <button
+                              className="btn btn-secondary btn-sm"
+                              style={{ borderColor: 'rgba(6, 182, 212, 0.45)', color: '#22d3ee' }}
+                              title="View 4-Week ML Demand Forecast"
+                              onClick={() => onViewForecast && onViewForecast(item.sku)}
+                            >
+                              <TrendingUp size={14} color="#06b6d4" /> Forecast
+                            </button>
+                          ) : (
+                            <button
+                              className="btn btn-secondary btn-sm"
+                              style={{ opacity: 0.6 }}
+                              title="ML forecast available for 40 key monitored SKUs"
+                              onClick={() => {
+                                if (showToast) {
+                                  showToast('info', 'ML Model Scope', `SKU ${item.sku} is outside the 40 ML-monitored catalogue. Opening ML forecast overview.`);
+                                }
+                                if (onViewForecast) onViewForecast('FIL-1016');
+                              }}
+                            >
+                              <TrendingUp size={14} /> Forecast
+                            </button>
+                          )}
                           <button
                             className="btn btn-primary btn-sm"
                             title="Add to draft order"
