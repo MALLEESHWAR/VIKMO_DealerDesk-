@@ -242,9 +242,9 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
                         <span className="mono-badge">{item.sku}</span>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#f8fafc' }}>{item.name}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-bright)' }}>{item.name}</div>
                         {item.description && (
-                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {item.description}
                           </div>
                         )}
@@ -320,8 +320,8 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
         </div>
 
         {/* Pagination Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.9rem 1.25rem', borderTop: '1px solid var(--border-subtle)' }}>
-          <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.9rem 1.25rem', borderTop: '1px solid var(--border-subtle)', background: '#ffffff' }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             Showing {products.length > 0 ? (page - 1) * pageSize + 1 : 0} to {Math.min(page * pageSize, count)} of {count} products
           </span>
 
@@ -333,7 +333,7 @@ export function ProductsView({ searchTerm, setSearchTerm, onAddToDraft, onViewFo
             >
               <ChevronLeft size={15} /> Prev
             </button>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#f8fafc' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-bright)' }}>
               Page {page} of {totalPages}
             </span>
             <button

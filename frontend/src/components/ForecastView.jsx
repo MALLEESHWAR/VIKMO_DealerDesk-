@@ -163,22 +163,22 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  <BarChart2 size={20} color="#10b981" />
-                  <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>
-                    4-Week Sales Forecast Projection: <span className="mono-badge" style={{ fontSize: '1rem', color: '#10b981' }}>{selectedSku}</span>
+                  <BarChart2 size={20} color="#059669" />
+                  <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-bright)' }}>
+                    4-Week Sales Forecast Projection: <span className="mono-badge" style={{ fontSize: '1rem', color: '#059669' }}>{selectedSku}</span>
                   </h2>
                   {activeReorderItem?.product_name && (
-                    <span style={{ fontSize: '0.9rem', color: '#e2e8f0', fontWeight: 500 }}>
+                    <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 500 }}>
                       — {activeReorderItem.product_name}
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '4px', display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
-                  <span>Fitment: <strong style={{ color: '#cbd5e1' }}>{activeReorderItem?.vehicle_fitment || 'Standard Fitment'}</strong></span>
-                  <span>Lead Time: <strong style={{ color: '#cbd5e1' }}>{activeReorderItem?.lead_time_weeks || 2} wks</strong></span>
-                  <span>Safety Buffer: <strong style={{ color: '#38bdf8' }}>+{activeReorderItem?.safety_stock || 0}</strong></span>
-                  <span>ROP: <strong style={{ color: '#f8fafc' }}>{activeReorderItem?.reorder_point || 0} units</strong></span>
-                  <span>Live Stock: <strong style={{ color: (activeReorderItem?.current_stock < activeReorderItem?.reorder_point) ? '#fb7185' : '#34d399' }}>{activeReorderItem?.current_stock ?? '—'} units</strong></span>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px', display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+                  <span>Fitment: <strong style={{ color: 'var(--text-bright)' }}>{activeReorderItem?.vehicle_fitment || 'Standard Fitment'}</strong></span>
+                  <span>Lead Time: <strong style={{ color: 'var(--text-bright)' }}>{activeReorderItem?.lead_time_weeks || 2} wks</strong></span>
+                  <span>Safety Buffer: <strong style={{ color: '#0284c7' }}>+{activeReorderItem?.safety_stock || 0}</strong></span>
+                  <span>ROP: <strong style={{ color: 'var(--text-bright)' }}>{activeReorderItem?.reorder_point || 0} units</strong></span>
+                  <span>Live Stock: <strong style={{ color: (activeReorderItem?.current_stock < activeReorderItem?.reorder_point) ? '#e11d48' : '#059669' }}>{activeReorderItem?.current_stock ?? '—'} units</strong></span>
                 </div>
               </div>
 
@@ -283,8 +283,8 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
       <div className="glass-panel" style={{ padding: '0', overflow: 'hidden' }}>
         <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <ShieldCheck size={18} color="#10b981" />
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#f8fafc' }}>
+            <ShieldCheck size={18} color="#059669" />
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-bright)' }}>
               Inventory Reorder Suggestions Engine (ROP = Demand during Lead Time + Safety Stock)
             </h3>
           </div>
@@ -353,29 +353,29 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
                         <span className="mono-badge" style={{ fontWeight: 600 }}>{r.sku}</span>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-bright)', fontSize: '0.85rem' }}>
                           {r.product_name || r.sku}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                           {r.vehicle_fitment || r.category || 'Standard Part'}
                         </div>
                       </td>
                       <td>
-                        <span style={{ fontWeight: 700, color: isUnderROP ? '#fb7185' : '#34d399' }}>
+                        <span style={{ fontWeight: 700, color: isUnderROP ? '#e11d48' : '#059669' }}>
                           {r.current_stock} units
                         </span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>{r.lead_time_weeks} weeks</span>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{r.lead_time_weeks} weeks</span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>{r.lead_time_demand}</span>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{r.lead_time_demand}</span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>+{r.safety_stock}</span>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>+{r.safety_stock}</span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc' }}>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-bright)' }}>
                           {r.reorder_point} units
                         </span>
                       </td>

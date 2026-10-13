@@ -25,11 +25,11 @@ export function ToastContainer({ toasts, removeToast }) {
             <Icon size={20} color={iconColor} style={{ flexShrink: 0 }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               {toast.title && (
-                <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#f8fafc', marginBottom: '2px' }}>
+                <div style={{ fontWeight: 600, fontSize: '0.85rem', color: '#0f172a', marginBottom: '2px' }}>
                   {toast.title}
                 </div>
               )}
-              <div style={{ fontSize: '0.8rem', color: '#cbd5e1', wordBreak: 'break-word' }}>
+              <div style={{ fontSize: '0.8rem', color: '#475569', wordBreak: 'break-word' }}>
                 {toast.message}
               </div>
             </div>

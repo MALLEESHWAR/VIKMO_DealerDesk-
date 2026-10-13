@@ -115,21 +115,21 @@ export function DealersView({ dealers, loadDealers, selectedDealerId, setSelecte
             >
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
-                  <span className="mono-badge" style={{ fontWeight: 700, color: '#a5b4fc' }}>
+                  <span className="mono-badge" style={{ fontWeight: 700, color: '#047857' }}>
                     {dealer.dealer_code}
                   </span>
                   {isSelected && (
-                    <span style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 600, background: 'rgba(16, 185, 129, 0.15)', padding: '2px 8px', borderRadius: '12px' }}>
+                    <span style={{ fontSize: '0.7rem', color: '#059669', fontWeight: 600, background: 'rgba(16, 185, 129, 0.15)', padding: '2px 8px', borderRadius: '12px' }}>
                       Active Persona
                     </span>
                   )}
                 </div>
 
-                <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#f8fafc', marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-bright)', marginBottom: '0.5rem' }}>
                   {dealer.name}
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
                   {dealer.city && (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <MapPin size={14} color="#06b6d4" /> {dealer.city}

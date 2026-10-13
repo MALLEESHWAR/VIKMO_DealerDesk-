@@ -65,14 +65,14 @@ function renderInline(text, onSelectProduct) {
     }
     if (token.type === 'bold') {
       return (
-        <strong key={idx} style={{ color: '#f8fafc', fontWeight: 600 }}>
+        <strong key={idx} style={{ color: 'var(--text-bright)', fontWeight: 700 }}>
           {token.val}
         </strong>
       );
     }
     if (token.type === 'italic') {
       return (
-        <em key={idx} style={{ color: '#cbd5e1' }}>
+        <em key={idx} style={{ color: 'var(--text-muted)' }}>
           {token.val}
         </em>
       );
@@ -349,7 +349,7 @@ export function AssistantView({ selectedDealerId, dealers, onNavigateToOrder, on
                             <CheckCircle size={16} />
                             <span>Action Executed: <strong>{act.type}</strong></span>
                             {act.order_number && (
-                              <span className="mono-badge" style={{ color: '#ffffff', background: 'rgba(0,0,0,0.3)' }}>
+                              <span className="mono-badge">
                                 {act.order_number}
                               </span>
                             )}

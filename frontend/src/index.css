@@ -336,24 +336,34 @@ label {
   transform: translateY(1px);
 }
 
+.btn:disabled, button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: none !important;
+}
+
 .btn-primary {
   background: linear-gradient(135deg, #059669 0%, #10b981 60%, #06b6d4 100%);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
 }
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, #047857 0%, #059669 60%, #0891b2 100%);
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 .btn-secondary {
   background: #ffffff;
-  border-color: rgba(203, 213, 225, 0.9);
-  color: var(--text-main);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
-.btn-secondary:hover {
-  background: #f8fafc;
+.btn-secondary:hover:not(:disabled) {
+  background: #f1f5f9;
   border-color: #94a3b8;
   color: #0f172a;
 }

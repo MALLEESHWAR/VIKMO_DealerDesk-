@@ -283,15 +283,15 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                   return (
                     <tr key={ord.order_number}>
                       <td>
-                        <span className="mono-badge" style={{ fontWeight: 600, color: '#a5b4fc' }}>
+                        <span className="mono-badge" style={{ fontWeight: 600 }}>
                           {ord.order_number}
                         </span>
                       </td>
                       <td>
-                        <div style={{ fontWeight: 600, color: '#f8fafc', fontSize: '0.85rem' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-bright)', fontSize: '0.85rem' }}>
                           {dealerObj?.dealer_code || `#${ord.dealer_id}`}
                         </div>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{dealerName}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{dealerName}</div>
                       </td>
                       <td>
                         <span className={`status-pill ${ord.status.toLowerCase()}`}>
@@ -299,7 +299,7 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                         </span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                           {itemCount} units ({ord.items?.length || 0} lines)
                         </span>
                       </td>
@@ -307,13 +307,13 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                         <span className="currency-amount">₹{parseFloat(ord.subtotal).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                       </td>
                       <td>
-                        <span className="currency-amount" style={{ color: '#94a3b8' }}>₹{parseFloat(ord.tax_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="currency-amount" style={{ color: 'var(--text-muted)' }}>₹{parseFloat(ord.tax_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                       </td>
                       <td>
-                        <span className="currency-amount" style={{ color: '#34d399', fontWeight: 700 }}>₹{parseFloat(ord.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                        <span className="currency-amount" style={{ color: '#059669', fontWeight: 700 }}>₹{parseFloat(ord.grand_total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                       </td>
                       <td>
-                        <span style={{ fontSize: '0.775rem', color: '#94a3b8' }}>
+                        <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
                           {new Date(ord.created_at).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
                         </span>
                       </td>
@@ -411,20 +411,20 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                           width: '28px',
                           height: '28px',
                           borderRadius: '50%',
-                          background: isPassed ? '#10b981' : '#111827',
-                          border: isCurrent ? '2px solid #34d399' : '1px solid var(--border-subtle)',
-                          boxShadow: isCurrent ? '0 0 10px rgba(16, 185, 129, 0.5)' : 'none',
+                          background: isPassed ? '#10b981' : '#e2e8f0',
+                          border: isCurrent ? '2px solid #059669' : '1px solid var(--border-subtle)',
+                          boxShadow: isCurrent ? '0 0 10px rgba(16, 185, 129, 0.35)' : 'none',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          color: '#ffffff',
+                          color: isPassed ? '#ffffff' : '#64748b',
                           fontSize: '0.75rem',
                           fontWeight: 700,
                         }}
                       >
                         {idx + 1}
                       </div>
-                      <span style={{ fontSize: '0.7rem', color: isPassed ? '#f8fafc' : '#64748b', marginTop: '4px', fontWeight: 600 }}>
+                      <span style={{ fontSize: '0.7rem', color: isPassed ? '#059669' : '#64748b', marginTop: '4px', fontWeight: 600 }}>
                         {step}
                       </span>
                     </div>
@@ -432,7 +432,7 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                 })}
               </div>
               {selectedOrder.status === 'CANCELLED' && (
-                <div style={{ marginTop: '0.75rem', textAlign: 'center', color: '#fb7185', fontSize: '0.8rem', fontWeight: 600 }}>
+                <div style={{ marginTop: '0.75rem', textAlign: 'center', color: '#e11d48', fontSize: '0.8rem', fontWeight: 600 }}>
                   ⚠️ Order is Cancelled (Stock restored if was confirmed)
                 </div>
               )}
@@ -440,7 +440,7 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
 
             {/* Line Items Table */}
             <div style={{ marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc', marginBottom: '0.5rem' }}>Order Line Items</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-bright)', marginBottom: '0.5rem' }}>Order Line Items</div>
               <div className="table-container">
                 <table className="data-table" style={{ fontSize: '0.8rem' }}>
                   <thead>
@@ -462,8 +462,8 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
                         <td>{it.quantity}</td>
                         <td><span className="currency-amount">₹{it.unit_price}</span></td>
                         <td><span className="currency-amount">₹{it.line_subtotal}</span></td>
-                        <td><span className="currency-amount" style={{ color: '#94a3b8' }}>₹{it.line_tax}</span></td>
-                        <td><span className="currency-amount" style={{ color: '#34d399' }}>₹{it.line_total}</span></td>
+                        <td><span className="currency-amount" style={{ color: 'var(--text-muted)' }}>₹{it.line_tax}</span></td>
+                        <td><span className="currency-amount" style={{ color: '#059669' }}>₹{it.line_total}</span></td>
                       </tr>
                     ))}
                   </tbody>
@@ -543,7 +543,7 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
 
             {/* Select Dealer */}
             <div style={{ marginBottom: '1.25rem' }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.35rem', fontWeight: 600 }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem', fontWeight: 600 }}>
                 Select Purchasing Dealer *
               </label>
               <select
@@ -561,7 +561,7 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
 
             {/* Add Products to Order */}
             <div style={{ marginBottom: '1.25rem', position: 'relative' }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.35rem', fontWeight: 600 }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.35rem', fontWeight: 600 }}>
                 Search & Add Spare Parts
               </label>
               <div className="search-bar-wrap" style={{ maxWidth: '100%' }}>
@@ -628,11 +628,11 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
 
             {/* Selected Items */}
             <div style={{ marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '0.4rem' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-bright)', marginBottom: '0.4rem' }}>
                 Selected Line Items ({orderItems.length})
               </div>
               {orderItems.length === 0 ? (
-                <div style={{ padding: '1.5rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px dashed var(--border-subtle)', color: '#64748b' }}>
+                <div style={{ padding: '1.5rem', textAlign: 'center', background: '#f8fafc', borderRadius: '8px', border: '1px dashed var(--border-subtle)', color: 'var(--text-muted)' }}>
                   No items added yet. Search products above or add directly from the Products tab.
                 </div>
               ) : (
@@ -749,20 +749,20 @@ export function OrdersView({ dealers, selectedDealerId, draftCart, setDraftCart,
               </button>
             </div>
 
-            <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '1rem' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
               {stockErrorModal.message}
             </p>
 
             <div style={{ background: 'rgba(244, 63, 94, 0.08)', borderRadius: '8px', padding: '0.85rem', border: '1px solid rgba(244, 63, 94, 0.2)', marginBottom: '1.25rem' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fb7185', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#e11d48', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
                 Shortage Breakdown (Requested vs Available)
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 {stockErrorModal.details?.map((shortItem, idx) => (
-                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#f8fafc' }}>
+                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-bright)' }}>
                     <span className="mono-badge">{shortItem.sku}</span>
                     <span>
-                      Requested: <strong style={{ color: '#fb7185' }}>{shortItem.requested}</strong> | Available: <strong style={{ color: '#34d399' }}>{shortItem.available}</strong>
+                      Requested: <strong style={{ color: '#e11d48' }}>{shortItem.requested}</strong> | Available: <strong style={{ color: '#059669' }}>{shortItem.available}</strong>
                     </span>
                   </div>
                 ))}

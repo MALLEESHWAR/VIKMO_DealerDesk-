@@ -105,7 +105,7 @@ export function SupplierSyncView({ showToast }) {
             </div>
 
             <div className="stat-card">
-              <div className="stat-icon-wrap" style={{ background: 'rgba(148, 163, 184, 0.15)', color: '#cbd5e1' }}>
+              <div className="stat-icon-wrap" style={{ background: 'rgba(100, 116, 139, 0.12)', color: '#475569' }}>
                 <Layers size={24} />
               </div>
               <div>
@@ -157,7 +157,7 @@ export function SupplierSyncView({ showToast }) {
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                   {syncResult.rejected.map((rej, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8rem', color: '#cbd5e1' }}>
+                    <div key={i} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                       <span className="mono-badge">{rej.supplier_sku || 'UNKNOWN'}</span>
                       <span style={{ color: '#fb7185' }}>Reason: {rej.reason}</span>
                     </div>
