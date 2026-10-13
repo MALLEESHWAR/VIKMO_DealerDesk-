@@ -50,6 +50,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 body {
@@ -59,10 +61,11 @@ body {
   min-height: 100vh;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   /* Premium Automotive Dealer Desk Background with Soft White Frost Overlay */
   background-image: 
     linear-gradient(rgba(248, 250, 252, 0.88), rgba(241, 245, 249, 0.94)),
-    url('/dealer_desk_bg.jpg');
+    url('./assets/dealer_desk_bg.jpg');
   background-size: cover;
   background-position: center top;
   background-attachment: fixed;
@@ -70,7 +73,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar for WebKit */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -103,8 +106,8 @@ label {
   position: sticky;
   top: 0;
   z-index: 50;
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   background: rgba(255, 255, 255, 0.95);
   border-bottom: 1px solid var(--border-subtle);
   padding: 0.75rem 1.5rem;
@@ -130,7 +133,7 @@ label {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
-  color: white;
+  color: #ffffff;
 }
 
 .brand-title {
@@ -145,7 +148,9 @@ label {
 
 .brand-title span {
   background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+  background-clip: text;
   -webkit-background-clip: text;
+  color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
@@ -277,8 +282,8 @@ label {
 /* Common Card */
 .glass-panel {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
@@ -351,7 +356,7 @@ label {
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
 }
-.btn-primary:hover:not(:disabled) {
+.btn-primary:not(:disabled):hover {
   background: linear-gradient(135deg, #047857 0%, #059669 60%, #0891b2 100%);
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
@@ -362,7 +367,7 @@ label {
   color: #0f172a;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
-.btn-secondary:hover:not(:disabled) {
+.btn-secondary:not(:disabled):hover {
   background: #f1f5f9;
   border-color: #94a3b8;
   color: #0f172a;
@@ -373,7 +378,7 @@ label {
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
 }
-.btn-accent:hover {
+.btn-accent:not(:disabled):hover {
   background: linear-gradient(135deg, #0e7490 0%, #0891b2 100%);
   box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
 }
@@ -383,7 +388,7 @@ label {
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
 }
-.btn-success:hover {
+.btn-success:not(:disabled):hover {
   background: linear-gradient(135deg, #047857 0%, #059669 100%);
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
@@ -393,7 +398,7 @@ label {
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(244, 63, 94, 0.25);
 }
-.btn-danger:hover {
+.btn-danger:not(:disabled):hover {
   background: linear-gradient(135deg, #be123c 0%, #e11d48 100%);
   box-shadow: 0 6px 20px rgba(244, 63, 94, 0.4);
 }
@@ -580,8 +585,8 @@ label {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -723,13 +728,13 @@ label {
 
 .avatar-user {
   background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
-  color: white;
+  color: #ffffff;
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
 }
 
 .avatar-assistant {
   background: linear-gradient(135deg, #047857 0%, #06b6d4 100%);
-  color: white;
+  color: #ffffff;
   box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
 }
 
@@ -738,7 +743,8 @@ label {
   border-radius: var(--radius-lg);
   font-size: 0.9rem;
   line-height: 1.6;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .message-row.user .message-bubble {
