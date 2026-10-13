@@ -5,7 +5,6 @@ import {
   Send, 
   Sparkles, 
   User, 
-  Wrench, 
   Package, 
   CheckCircle, 
   ShoppingBag, 
@@ -364,21 +363,6 @@ export function AssistantView({ selectedDealerId, dealers, onNavigateToOrder, on
                               View Order <ExternalLink size={12} />
                             </button>
                           )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Tool Calls Log Drawer */}
-                  {msg.tool_calls && msg.tool_calls.length > 0 && (
-                    <div className="tool-calls-container">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#06b6d4', fontWeight: 600, marginBottom: '0.3rem' }}>
-                        <Wrench size={13} /> Tool Calls Executed ({msg.tool_calls.length})
-                      </div>
-                      {msg.tool_calls.map((t, idx) => (
-                        <div key={idx} style={{ marginTop: '3px' }}>
-                          <span style={{ color: '#a5b4fc', fontWeight: 600 }}>{t.name}</span>
-                          <span style={{ color: '#64748b' }}>({JSON.stringify(t.arguments || {})})</span>
                         </div>
                       ))}
                     </div>

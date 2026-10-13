@@ -163,9 +163,9 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  <BarChart2 size={20} color="#6366f1" />
+                  <BarChart2 size={20} color="#10b981" />
                   <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#f8fafc' }}>
-                    4-Week Sales Forecast Projection: <span className="mono-badge" style={{ fontSize: '1rem', color: '#06b6d4' }}>{selectedSku}</span>
+                    4-Week Sales Forecast Projection: <span className="mono-badge" style={{ fontSize: '1rem', color: '#10b981' }}>{selectedSku}</span>
                   </h2>
                   {activeReorderItem?.product_name && (
                     <span style={{ fontSize: '0.9rem', color: '#e2e8f0', fontWeight: 500 }}>
@@ -258,7 +258,7 @@ export function ForecastView({ initialSku, onAddToDraft, showToast }) {
                           maxWidth: '64px',
                           height: `${heightPercent}%`,
                           background: idx === 0 
-                            ? 'linear-gradient(180deg, #6366f1 0%, #4f46e5 100%)' 
+                            ? 'linear-gradient(180deg, #10b981 0%, #059669 100%)' 
                             : 'linear-gradient(180deg, #06b6d4 0%, #0891b2 100%)',
                           borderRadius: '6px 6px 2px 2px',
                           boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
